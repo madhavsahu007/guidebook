@@ -30,7 +30,7 @@
     self.table.delegate = self;
     self.table.dataSource = self;
     
-    //initializing the arrays
+    //initializing the arrays //
     
     dataForstartDate = [[NSMutableDictionary alloc] init];
     guideArray = [[NSMutableArray alloc] init];
@@ -43,7 +43,8 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     
-    // link to get json contents of upcoming guides
+    // link to get json contents of upcoming guides //
+    
     NSURL *url = [NSURL URLWithString:@"https://www.guidebook.com/service/v2/upcomingGuides/"];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
@@ -54,7 +55,8 @@
         webData = [[NSMutableData alloc] init];
     }
     
-    //this is to start the activity indicator
+    //this is to start the activity indicator //
+    
     [self.aiv startAnimating];
     [self.table reloadData];
 }
@@ -79,11 +81,6 @@
     NSLog(@"fail with error");
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return  50;
-    
-}
-
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
     
     // storing the objects from link into array
@@ -106,7 +103,7 @@
         
     }
     
-    // this step is to storing guidelist according to the start date
+    // this step is to storing guidelist according to the start date //
     
     for(Guide *g in guideArray){
         NSString *currentstartdate = g.startDate;
@@ -179,6 +176,5 @@
     
     return cell;
 }
-
 
 @end
