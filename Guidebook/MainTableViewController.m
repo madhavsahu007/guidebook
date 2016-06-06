@@ -11,10 +11,12 @@
 
 @interface MainTableViewController ()
 {
+    
+    // additional variables
+    
     NSMutableArray *startDateArray;
     NSMutableArray *guideArray;
     NSMutableDictionary *dataForstartDate;
-
     NSMutableData *webData;
     NSURLConnection *connection;
 }
@@ -27,7 +29,9 @@
     [super viewDidLoad];
     self.table.delegate = self;
     self.table.dataSource = self;
-
+    
+    //initializing the arrays
+    
     dataForstartDate = [[NSMutableDictionary alloc] init];
     guideArray = [[NSMutableArray alloc] init];
     startDateArray = [[NSMutableArray alloc] init];
@@ -38,6 +42,8 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    
+    // link to get json contents of upcoming guides
     NSURL *url = [NSURL URLWithString:@"https://www.guidebook.com/service/v2/upcomingGuides/"];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
@@ -48,6 +54,7 @@
         webData = [[NSMutableData alloc] init];
     }
     
+    //this is to start the activity indicator
     [self.aiv startAnimating];
     [self.table reloadData];
 }
@@ -79,12 +86,14 @@
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
     
+    // storing the objects from link into array
     NSArray *dataDictionary = [NSJSONSerialization JSONObjectWithData:webData options:0 error:nil];
     
     NSLog(@"Details are : %@",dataDictionary);
     
     NSArray *data = [dataDictionary valueForKey:@"data"];
     
+    // each details of guide is added in guidelist
     for(int i =0;i<data.count;i++){
         Guide *guide = [[Guide alloc] init];
         
@@ -96,6 +105,8 @@
         [guideArray addObject:guide];
         
     }
+    
+    // this step is to storing guidelist according to the start date
     
     for(Guide *g in guideArray){
         NSString *currentstartdate = g.startDate;
@@ -111,6 +122,7 @@
         
     }
     
+    // this is to stop activity indicator view
     [self.aiv stopAnimating];
     [self.aiv hidesWhenStopped];
     
@@ -126,15 +138,15 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-
+    // Return the number of sections.
     return [startDateArray count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
+    // Return the number of rows in the section.
     NSString *key = [startDateArray objectAtIndex:section];
     NSMutableArray *tableViewCellforSection = [dataForstartDate objectForKey:key];
-    
     return [tableViewCellforSection count];
     
     
@@ -155,16 +167,12 @@
     NSArray *details = dataForstartDate[startDate];
     guideObject = details[indexPath.row];
     
+    //converting http link in the format of string to get image
     NSURL *imageURL = [NSURL URLWithString:guideObject.image];
     NSData *imageData = [[NSData alloc] initWithContentsOfURL:imageURL];
-    
     UIImage *image = [UIImage imageWithData:imageData];
     
     cell.imageView.image = image;
-    
-    
-    
-    
     cell.textLabel.text = guideObject.name;
     cell.detailTextLabel.text = [@"Ends - " stringByAppendingString:guideObject.endDate];
     

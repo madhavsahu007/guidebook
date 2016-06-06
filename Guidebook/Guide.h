@@ -10,6 +10,7 @@
 
 @interface Guide : NSObject
 
+// variables declared here
 
 @property (strong, nonatomic)  NSString *startDate;
 @property (strong, nonatomic)  NSString *endDate;

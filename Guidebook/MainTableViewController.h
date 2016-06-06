@@ -10,6 +10,8 @@
 
 @interface MainTableViewController : UITableViewController<NSURLConnectionDataDelegate>
 
+
+
 @property (strong, nonatomic) IBOutlet UITableView *table;
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *aiv;
